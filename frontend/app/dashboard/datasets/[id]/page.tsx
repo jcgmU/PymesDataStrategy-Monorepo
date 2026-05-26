@@ -359,7 +359,7 @@ export default function DatasetDetailPage() {
       </div>
 
       {/* Schema panel */}
-      {dataset.schema && (
+      {!!dataset.schema && (
         <div className="bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6">
           <h2 className="text-xl font-black uppercase border-b-2 border-black pb-2 mb-4">
             Esquema

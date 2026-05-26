@@ -54,6 +54,7 @@ export class Container {
       this.redisInstance = new Redis({
         host: this.env.REDIS_HOST,
         port: this.env.REDIS_PORT,
+        password: this.env.REDIS_PASSWORD,
         maxRetriesPerRequest: null, // Required for BullMQ
         enableReadyCheck: false,
         keepAlive: 10000,
@@ -145,6 +146,7 @@ export class Container {
       const redisForEvents = new Redis({
         host: this.env.REDIS_HOST,
         port: this.env.REDIS_PORT,
+        password: this.env.REDIS_PASSWORD,
         maxRetriesPerRequest: null,
         enableReadyCheck: false,
         keepAlive: 10000,

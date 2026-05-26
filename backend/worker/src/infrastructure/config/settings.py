@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     # Redis
     redis_host: str = "localhost"
     redis_port: int = Field(default=6379, ge=1, le=65535)
+    redis_password: str = ""
 
     # MinIO / S3
     minio_endpoint: str = "localhost"
@@ -58,6 +59,8 @@ class Settings(BaseSettings):
     @property
     def redis_url(self) -> str:
         """Build Redis URL from components."""
+        if self.redis_password:
+            return f"redis://:{self.redis_password}@{self.redis_host}:{self.redis_port}"
         return f"redis://{self.redis_host}:{self.redis_port}"
 
     @property
