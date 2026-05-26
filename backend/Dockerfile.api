@@ -12,8 +12,8 @@ COPY package.json pnpm-workspace.yaml ./
 COPY api/package.json api/
 COPY prisma/ prisma/
 
-RUN pnpm config set ignore-scripts false
-RUN pnpm install --ignore-scripts
+# Full install (dev deps needed for prisma CLI + tsc)
+RUN pnpm install
 RUN pnpm exec prisma generate --schema=prisma/schema.prisma
 
 COPY api/ api/
@@ -32,9 +32,11 @@ COPY package.json pnpm-workspace.yaml ./
 COPY api/package.json api/
 COPY prisma/ prisma/
 
-RUN pnpm config set ignore-scripts false
-RUN pnpm install --ignore-scripts --prod
-RUN pnpm exec prisma generate --schema=prisma/schema.prisma
+# Prod-only install for @prisma/client runtime
+RUN pnpm install --prod
+
+# Copy generated Prisma client from builder (avoids needing prisma CLI at runtime)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 COPY --from=builder /app/api/dist api/dist
 COPY api/docker-entrypoint.sh /docker-entrypoint.sh
