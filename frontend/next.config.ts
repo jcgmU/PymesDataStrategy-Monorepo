@@ -36,7 +36,6 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   async headers() {
     const apiPublicUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
     const headers = securityHeaders.map((h) => {

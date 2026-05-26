@@ -78,21 +78,21 @@ const TIPOS = [
 ];
 
 // ── Helpers de formato ────────────────────────────────────────────────────────
-const fmtN = (n) => {
+const fmtN = (n: number | null | undefined) => {
   if (n == null) return '—';
   const abs = Math.abs(n);
   if (abs >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (abs >= 1_000)     return `${(n / 1_000).toFixed(0)}K`;
   return Number(n).toLocaleString('es-CO', { maximumFractionDigits: 2 });
 };
-const humanLabel = (col) => col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-const corrColor  = (v) => {
+const humanLabel = (col: string) => col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+const corrColor  = (v: number) => {
   const a = Math.abs(v);
   if (a >= 0.7) return v > 0 ? '#dcfce7' : '#fee2e2';
   if (a >= 0.5) return v > 0 ? '#fef9c3' : '#fef3c7';
   return '#f9fafb';
 };
-const corrText = (v) => {
+const corrText = (v: number) => {
   const a = Math.abs(v);
   if (a >= 0.7) return v > 0 ? '#15803d' : '#b91c1c';
   if (a >= 0.5) return v > 0 ? '#854d0e' : '#92400e';
@@ -103,7 +103,7 @@ const corrText = (v) => {
 // Visualizaciones por tipo
 // ══════════════════════════════════════════════════════════════════════════════
 
-function VisualizacionRegresion({ r }) {
+function VisualizacionRegresion({ r }: { r: any }) {
   const allLabels = [...r.labels, ...r.proj_labels];
   const historical = [...r.valores, ...Array(r.proj_labels.length).fill(null)];
   const tendLine   = [...r.linea_tend, ...Array(r.proj_labels.length).fill(null)];
@@ -153,7 +153,7 @@ function VisualizacionRegresion({ r }) {
   );
 }
 
-function VisualizacionAnomalias({ r }) {
+function VisualizacionAnomalias({ r }: { r: any }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
@@ -206,7 +206,7 @@ function VisualizacionAnomalias({ r }) {
   );
 }
 
-function VisualizacionClustering({ r }) {
+function VisualizacionClustering({ r }: { r: any }) {
   const CLUSTER_COLORS = [PAL[0], PAL[1], PAL[2]];
   const datasets = Array.from({ length: r.k }, (_, i) => ({
     label: r.clusters[i]?.nombre ?? `Grupo ${i+1}`,
@@ -245,7 +245,7 @@ function VisualizacionClustering({ r }) {
   );
 }
 
-function VisualizacionCorrelacion({ r }) {
+function VisualizacionCorrelacion({ r }: { r: any }) {
   const cols = r.cols || [];
   return (
     <div>
@@ -297,7 +297,7 @@ function VisualizacionCorrelacion({ r }) {
   );
 }
 
-function VisualizacionSeriesTiempo({ r }) {
+function VisualizacionSeriesTiempo({ r }: { r: any }) {
   const data = {
     labels: r.labels,
     datasets: [
@@ -346,7 +346,7 @@ function VisualizacionSeriesTiempo({ r }) {
 }
 
 // ── Render resultado según tipo ────────────────────────────────────────────────
-function RenderResultado({ resultados }) {
+function RenderResultado({ resultados }: { resultados: any }) {
   const t = resultados?.tipo;
   if (!resultados || resultados.error) return null;
   if (t === 'regresion')    return <VisualizacionRegresion r={resultados} />;
@@ -360,7 +360,7 @@ function RenderResultado({ resultados }) {
 // ══════════════════════════════════════════════════════════════════════════════
 // MODAL PRINCIPAL
 // ══════════════════════════════════════════════════════════════════════════════
-export default function AnalisisAvanzadoModal({ datasetId, onClose }) {
+export default function AnalisisAvanzadoModal({ datasetId, onClose }: { datasetId: string; onClose: () => void }) {
   const [tipoSel,    setTipoSel]    = useState(null);
   const [loading,    setLoading]    = useState(false);
   const [resultado,  setResultado]  = useState(null);
@@ -388,7 +388,7 @@ export default function AnalisisAvanzadoModal({ datasetId, onClose }) {
       setResultado(data.resultados);
       setInterp(data.interpretacion);
     } catch (err) {
-      setError(err.message || 'Error desconocido');
+      setError(err instanceof Error ? err.message : 'Error desconocido');
     } finally {
       setLoading(false);
     }
