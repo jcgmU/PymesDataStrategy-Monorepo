@@ -20,5 +20,15 @@
   },
   "dependencies": {
     "@prisma/client": "6.4.1"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "bcrypt",
+      "esbuild",
+      "msgpackr-extract",
+      "@scarf/scarf"
+    ]
   }
 }
