@@ -29,7 +29,10 @@ WORKDIR /app
 
 # Copy pre-built artifacts — avoids re-running pnpm install with its
 # native compilation and build-script approval requirements in production.
+# pnpm workspaces: root node_modules has .pnpm store; api/node_modules
+# has per-workspace symlinks that Node.js resolves relative to the file.
 COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/api/node_modules ./api/node_modules
 COPY --from=builder /app/api/dist ./api/dist
 
 COPY prisma/ prisma/
