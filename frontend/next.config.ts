@@ -36,13 +36,27 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: securityHeaders,
-      },
-    ]
+    const apiPublicUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3000'
+    const headers = securityHeaders.map((h) => {
+      if (h.key === 'Content-Security-Policy') {
+        return {
+          ...h,
+          value: [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
+            "style-src 'self' 'unsafe-inline'",
+            "img-src 'self' data: blob:",
+            "font-src 'self' data:",
+            `connect-src 'self' ${apiPublicUrl} ws://localhost:*`,
+            "frame-ancestors 'none'",
+          ].join('; '),
+        }
+      }
+      return h
+    })
+    return [{ source: '/:path*', headers }]
   },
   async rewrites() {
     const apiUrl = process.env.INTERNAL_API_URL ?? 'http://localhost:3000'
