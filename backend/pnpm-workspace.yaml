@@ -1,2 +1,10 @@
 packages:
   - "api"
+
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - bcrypt
+  - esbuild
+  - msgpackr-extract
+  - "@scarf/scarf"
