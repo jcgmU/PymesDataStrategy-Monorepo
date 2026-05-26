@@ -1,10 +1,14 @@
 packages:
-  - "api"
+  - api
 
 onlyBuiltDependencies:
-  - "@prisma/client"
-  - "@prisma/engines"
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@scarf/scarf'
   - bcrypt
+  - cpu-features
   - esbuild
   - msgpackr-extract
-  - "@scarf/scarf"
+  - prisma
+  - protobufjs
+  - ssh2
