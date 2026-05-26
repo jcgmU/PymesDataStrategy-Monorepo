@@ -138,9 +138,6 @@ services:
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
       INSTRUCTION_PARSER_ENABLED: ${INSTRUCTION_PARSER_ENABLED:-true}
-    volumes:
-      - ./api/src:/app/api/src:ro
-      - ./prisma:/app/prisma:ro
     depends_on:
       postgres:
         condition: service_healthy
@@ -175,9 +172,6 @@ services:
       JWT_SECRET: ${PYMES_DASHBOARD_JWT_SECRET:-dev-dashboard-jwt-secret}
       JWT_EXPIRES_IN: ${PYMES_DASHBOARD_JWT_EXPIRES_IN:-7d}
       AGENT_URL: http://pymes-dashboard-agent:8000 # Will connect to the new dedicated agent service
-    volumes:
-      - ../services/dashboard-pymes/backend:/app
-      - /app/node_modules # Anonymous volume to prevent host node_modules from overriding container's
     depends_on:
       pymes-dashboard-db:
         condition: service_healthy
@@ -202,9 +196,6 @@ services:
       DB_USER: ${PYMES_DASHBOARD_DB_USER:-pymes_dashboard}
       DB_PASSWORD: ${PYMES_DASHBOARD_DB_PASSWORD:-pymes_dashboard_dev_password}
       BACKEND_URL: http://pymes-dashboard-backend:3001 # Connects to the new backend service
-    volumes:
-      - ../services/dashboard-pymes/agent:/app
-      - agent_venv:/app/venv # Anonymous volume for Python virtual environment
     depends_on:
       pymes-dashboard-db:
         condition: service_healthy
@@ -242,8 +233,6 @@ services:
       N8N_WEBHOOK_SECRET: ${N8N_WEBHOOK_SECRET:-pymes-n8n-secret-2024}
       GEMINI_API_KEY: ${GEMINI_API_KEY:-}
       GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
-    volumes:
-      - ./worker/src:/app/src:ro
     depends_on:
       redis:
         condition: service_healthy
@@ -273,20 +262,6 @@ services:
       NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3001}
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-dev-secret-change-in-production}
       NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3000}
-    volumes:
-      - ../frontend/app:/app/app:ro
-      - ../frontend/components:/app/components:ro
-      - ../frontend/hooks:/app/hooks:ro
-      - ../frontend/lib:/app/lib:ro
-      - ../frontend/public:/app/public:ro
-      - ../frontend/services:/app/services:ro
-      - ../frontend/store:/app/store:ro
-      - ../frontend/types:/app/types:ro
-      - ../frontend/auth.ts:/app/auth.ts:ro
-      - ../frontend/auth.config.ts:/app/auth.config.ts:ro
-      - ../frontend/next.config.ts:/app/next.config.ts:ro
-      - ../frontend/middleware.ts:/app/middleware.ts:ro
-      - frontend_node_modules:/app/node_modules
     depends_on:
       api:
         condition: service_healthy

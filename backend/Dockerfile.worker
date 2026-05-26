@@ -1,0 +1,26 @@
+# Production Dockerfile for Worker ETL
+# Build context: backend/
+# docker build -f Dockerfile.worker -t pymes-worker .
+
+FROM python:3.12-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install uv
+
+COPY worker/pyproject.toml worker/README.md ./
+
+RUN uv sync --no-dev
+
+COPY worker/src ./src
+
+ENV PYTHONPATH=/app
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8000
+
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
