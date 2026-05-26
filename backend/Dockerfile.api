@@ -6,7 +6,9 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Pin pnpm v9 — pnpm v10+ introduced ERR_PNPM_IGNORED_BUILDS which
+# requires interactive build-script approval not suitable for Docker.
+RUN npm install -g pnpm@9
 
 COPY package.json pnpm-workspace.yaml ./
 COPY api/package.json api/
