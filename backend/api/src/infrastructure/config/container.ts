@@ -54,7 +54,7 @@ export class Container {
       this.redisInstance = new Redis({
         host: this.env.REDIS_HOST,
         port: this.env.REDIS_PORT,
-        password: this.env.REDIS_PASSWORD,
+        ...(this.env.REDIS_PASSWORD !== undefined ? { password: this.env.REDIS_PASSWORD } : {}),
         maxRetriesPerRequest: null, // Required for BullMQ
         enableReadyCheck: false,
         keepAlive: 10000,
@@ -80,7 +80,7 @@ export class Container {
         bucketDatasets: this.env.MINIO_BUCKET_DATASETS,
         bucketResults: this.env.MINIO_BUCKET_RESULTS,
         bucketTemp: this.env.MINIO_BUCKET_TEMP,
-        publicEndpoint: this.env.MINIO_PUBLIC_ENDPOINT,
+        ...(this.env.MINIO_PUBLIC_ENDPOINT !== undefined ? { publicEndpoint: this.env.MINIO_PUBLIC_ENDPOINT } : {}),
       });
     }
     return this.storageInstance;
@@ -146,7 +146,7 @@ export class Container {
       const redisForEvents = new Redis({
         host: this.env.REDIS_HOST,
         port: this.env.REDIS_PORT,
-        password: this.env.REDIS_PASSWORD,
+        ...(this.env.REDIS_PASSWORD !== undefined ? { password: this.env.REDIS_PASSWORD } : {}),
         maxRetriesPerRequest: null,
         enableReadyCheck: false,
         keepAlive: 10000,

@@ -51,6 +51,7 @@ describe('GetDownloadUrlUseCase', () => {
       getDatasetDownloadUrl: vi.fn(),
       uploadToResults: vi.fn(),
       uploadToTemp: vi.fn(),
+      getResultDownloadUrl: vi.fn(),
       healthCheck: vi.fn(),
     };
 
