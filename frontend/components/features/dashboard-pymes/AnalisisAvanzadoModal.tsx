@@ -78,21 +78,21 @@ const TIPOS = [
 ];
 
 // ── Helpers de formato ────────────────────────────────────────────────────────
-const fmtN = (n) => {
+const fmtN = (n: number | null | undefined): string => {
   if (n == null) return '—';
   const abs = Math.abs(n);
   if (abs >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (abs >= 1_000)     return `${(n / 1_000).toFixed(0)}K`;
   return Number(n).toLocaleString('es-CO', { maximumFractionDigits: 2 });
 };
-const humanLabel = (col) => col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-const corrColor  = (v) => {
+const humanLabel = (col: string): string => col.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+const corrColor  = (v: number): string => {
   const a = Math.abs(v);
   if (a >= 0.7) return v > 0 ? '#dcfce7' : '#fee2e2';
   if (a >= 0.5) return v > 0 ? '#fef9c3' : '#fef3c7';
   return '#f9fafb';
 };
-const corrText = (v) => {
+const corrText = (v: number): string => {
   const a = Math.abs(v);
   if (a >= 0.7) return v > 0 ? '#15803d' : '#b91c1c';
   if (a >= 0.5) return v > 0 ? '#854d0e' : '#92400e';
