@@ -1,6 +1,7 @@
 """BullMQ worker service for processing transformation jobs."""
 
 import asyncio
+import os
 from contextlib import suppress
 from typing import Any, Callable, Coroutine
 from uuid import UUID
@@ -130,22 +131,26 @@ class BullMQWorkerService:
         if self._processor is None:
             raise ValueError("No job processor configured. Call set_processor() first.")
 
-        logger.info(
-            "Starting BullMQ worker",
-            queue=self._queue_name,
-            concurrency=self._concurrency,
-            redis=f"{self._redis_host}:{self._redis_port}",
-            has_password=bool(self._redis_password),
-        )
+        # Fall back to reading the password straight from the environment in
+        # case the injected settings value is empty for any reason.
+        password = self._redis_password or os.environ.get("REDIS_PASSWORD", "")
 
         # Pass a full Redis URL so the password is reliably included across
         # bullmq-python versions (dict-form password handling is inconsistent).
-        if self._redis_password:
+        if password:
             connection = (
-                f"redis://:{self._redis_password}@{self._redis_host}:{self._redis_port}"
+                f"redis://default:{password}@{self._redis_host}:{self._redis_port}"
             )
         else:
             connection = f"redis://{self._redis_host}:{self._redis_port}"
+
+        # Plain print so it surfaces in container stdout (structlog output is
+        # not captured by Railway here). Masks the password.
+        print(
+            f"[WORKER] BullMQ connecting to {self._redis_host}:{self._redis_port} "
+            f"password_present={bool(password)}",
+            flush=True,
+        )
 
         self._worker = Worker(
             name=self._queue_name,
