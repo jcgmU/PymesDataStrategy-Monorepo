@@ -135,14 +135,17 @@ class BullMQWorkerService:
             queue=self._queue_name,
             concurrency=self._concurrency,
             redis=f"{self._redis_host}:{self._redis_port}",
+            has_password=bool(self._redis_password),
         )
 
-        connection: dict[str, Any] = {
-            "host": self._redis_host,
-            "port": self._redis_port,
-        }
+        # Pass a full Redis URL so the password is reliably included across
+        # bullmq-python versions (dict-form password handling is inconsistent).
         if self._redis_password:
-            connection["password"] = self._redis_password
+            connection = (
+                f"redis://:{self._redis_password}@{self._redis_host}:{self._redis_port}"
+            )
+        else:
+            connection = f"redis://{self._redis_host}:{self._redis_port}"
 
         self._worker = Worker(
             name=self._queue_name,
