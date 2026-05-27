@@ -157,7 +157,7 @@ function VisualizacionAnomalias({ r }: { r: any }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
-        {Object.entries(r.stats_cols || {}).map(([col, s]) => (
+        {(Object.entries(r.stats_cols || {}) as [string, any][]).map(([col, s]) => (
           <div key={col} style={{ flex: 1, minWidth: '120px', background: s.n_outliers > 0 ? '#fef2f2' : '#f0fdf4', border: `1px solid ${s.n_outliers > 0 ? '#fecaca' : '#bbf7d0'}`, borderRadius: '8px', padding: '8px 12px' }}>
             <p style={{ fontSize: '10px', color: '#6b7280', margin: '0 0 2px', fontWeight: 600 }}>{humanLabel(col)}</p>
             <p style={{ fontSize: '14px', fontWeight: 700, color: s.n_outliers > 0 ? '#dc2626' : '#16a34a', margin: 0 }}>
@@ -234,7 +234,7 @@ function VisualizacionClustering({ r }: { r: any }) {
             <p style={{ fontSize: '12px', fontWeight: 600, color: '#111827', margin: 0 }}>{cl.n} registros ({cl.pct}%)</p>
             {cl.stats && (
               <p style={{ fontSize: '10px', color: '#6b7280', margin: '3px 0 0' }}>
-                {Object.entries(cl.stats).slice(0, 2).map(([k, v]) => `${humanLabel(k)}: ${fmtN(v.avg)}`).join(' · ')}
+                {(Object.entries(cl.stats || {}) as [string, any][]).slice(0, 2).map(([k, v]) => `${humanLabel(k)}: ${fmtN(v.avg)}`).join(' · ')}
               </p>
             )}
           </div>
