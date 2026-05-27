@@ -133,34 +133,7 @@ class MinioStorageService(StorageService):
             body = response["Body"]
             return await asyncio.get_event_loop().run_in_executor(None, body.read)
         except ClientError as e:
-            code = e.response["Error"]["Code"]
-            # Diagnostic: probe bucket access and object listing to distinguish
-            # a missing object from a permission problem (printed to stdout).
-            prefix = key.split("/")[0]
-            head_bucket_ok = False
-            listed_keys: list[str] = []
-            list_err = ""
-            try:
-                await self._run(self._client.head_bucket, Bucket=bucket)
-                head_bucket_ok = True
-            except Exception as he:  # noqa: BLE001
-                list_err = f"head_bucket: {he}"
-            try:
-                resp = await self._run(
-                    self._client.list_objects_v2,
-                    Bucket=bucket,
-                    Prefix=prefix,
-                    MaxKeys=5,
-                )
-                listed_keys = [o["Key"] for o in resp.get("Contents", [])]
-            except Exception as le:  # noqa: BLE001
-                list_err += f" list_objects: {le}"
-            print(
-                f"[WORKER] download FAILED code={code} bucket={bucket} key={key} "
-                f"head_bucket_ok={head_bucket_ok} listed={listed_keys} err={list_err}",
-                flush=True,
-            )
-            if code in ("NoSuchKey", "404"):
+            if e.response["Error"]["Code"] in ("NoSuchKey", "404"):
                 raise FileNotFoundError(f"Object not found: {bucket}/{key}") from e
             raise
 

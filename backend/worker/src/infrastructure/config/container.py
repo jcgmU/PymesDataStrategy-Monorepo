@@ -105,6 +105,7 @@ class Container:
                 parser=self.parser,
                 transformer=self.transformer,
                 output_bucket=self.settings.minio_bucket_results,
+                source_bucket=self.settings.minio_bucket_datasets,
                 job_repository=self.job_repository,
                 ai_suggestion_service=self.ai_suggestion_service,
             )

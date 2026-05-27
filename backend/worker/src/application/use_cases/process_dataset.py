@@ -120,6 +120,7 @@ class ProcessDatasetUseCase:
         parser: DatasetParser | None = None,
         transformer: DataTransformer | None = None,
         output_bucket: str = "processed-datasets",
+        source_bucket: str = "datasets",
         job_repository: JobRepository | None = None,
         hitl_poll_interval: float = _HITL_POLL_INTERVAL_SECONDS,
         hitl_max_wait: float = _HITL_MAX_WAIT_SECONDS,
@@ -146,6 +147,7 @@ class ProcessDatasetUseCase:
         self._parser = parser or DatasetParser()
         self._transformer = transformer or DataTransformer()
         self._output_bucket = output_bucket
+        self._source_bucket = source_bucket
         self._job_repo = job_repository
         self._hitl_poll_interval = hitl_poll_interval
         self._hitl_max_wait = hitl_max_wait
@@ -2113,5 +2115,6 @@ class ProcessDatasetUseCase:
 
     def _parse_storage_path(self, source_key: str) -> tuple[str, str]:
         """Parse storage path into bucket and key."""
-        # Always return datasets bucket because source_key from API is the object key
-        return "datasets", source_key
+        # source_key from API is the object key; the bucket comes from config
+        # (production uses the Tigris bucket, not the literal "datasets").
+        return self._source_bucket, source_key
