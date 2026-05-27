@@ -38,6 +38,9 @@ class MinioStorageService(StorageService):
             endpoint_url=endpoint_url,
             aws_access_key_id=settings.minio_access_key or "minioadmin",
             aws_secret_access_key=settings.minio_secret_key or "minioadmin123",
+            # region must match the API's signing region (us-east-1) or SigV4
+            # signatures mismatch and Tigris/S3 returns AccessDenied on GetObject.
+            region_name=settings.minio_region,
             config=Config(
                 signature_version="s3v4",
                 s3={"addressing_style": "path"},  # Required for MinIO
