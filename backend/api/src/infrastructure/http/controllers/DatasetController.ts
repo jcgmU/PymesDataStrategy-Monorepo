@@ -317,7 +317,9 @@ export class DatasetController {
       }
 
       const isProcessed = dataset.storageKey.startsWith('processed/');
-      const bucket = isProcessed ? 'results' : 'datasets';
+      const bucket = isProcessed
+        ? this.container.config.MINIO_BUCKET_RESULTS
+        : this.container.config.MINIO_BUCKET_DATASETS;
 
       const fileStream = await this.container.storage.download(bucket, dataset.storageKey);
 
