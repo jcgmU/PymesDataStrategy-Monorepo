@@ -35,6 +35,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     worker = BullMQWorkerService(
         redis_host=container.settings.redis_host,
         redis_port=container.settings.redis_port,
+        redis_password=container.settings.redis_password,
         queue_name="etl-transformations",
         concurrency=container.settings.worker_concurrency,
     )

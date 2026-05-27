@@ -176,6 +176,7 @@ async def init_container() -> Container:
     redis_client = aioredis.Redis(
         host=settings.redis_host,
         port=settings.redis_port,
+        password=settings.redis_password or None,
         decode_responses=True,
     )
 

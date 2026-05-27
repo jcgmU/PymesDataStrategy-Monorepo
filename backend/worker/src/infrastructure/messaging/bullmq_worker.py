@@ -27,6 +27,7 @@ class BullMQWorkerService:
         redis_port: int,
         queue_name: str = "etl-transformations",
         concurrency: int = 2,
+        redis_password: str = "",
     ) -> None:
         """Initialize the BullMQ worker.
 
@@ -35,9 +36,11 @@ class BullMQWorkerService:
             redis_port: Redis server port.
             queue_name: Name of the queue to process.
             concurrency: Number of jobs to process concurrently.
+            redis_password: Redis password (empty string means no auth).
         """
         self._redis_host = redis_host
         self._redis_port = redis_port
+        self._redis_password = redis_password
         self._queue_name = queue_name
         self._concurrency = concurrency
         self._worker: Worker | None = None
@@ -134,14 +137,18 @@ class BullMQWorkerService:
             redis=f"{self._redis_host}:{self._redis_port}",
         )
 
+        connection: dict[str, Any] = {
+            "host": self._redis_host,
+            "port": self._redis_port,
+        }
+        if self._redis_password:
+            connection["password"] = self._redis_password
+
         self._worker = Worker(
             name=self._queue_name,
             processor=self._process_job,  # type: ignore
             opts={
-                "connection": {
-                    "host": self._redis_host,
-                    "port": self._redis_port,
-                },
+                "connection": connection,
                 "concurrency": self._concurrency,
             },
         )
