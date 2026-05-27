@@ -95,7 +95,7 @@ const fmtNum = (n, decimales = 2) => {
   if (abs >= 1_000)     return `${(n / 1_000).toFixed(0)}K`;
   return n.toLocaleString('es-CO', { maximumFractionDigits: decimales });
 };
-const fmtValor = (n, formato) => {
+const fmtValor = (n: any, formato: any) => {
   if (n == null || isNaN(n)) return '—';
   switch (formato) {
     case 'moneda':     return `$${fmtNum(n)}`;
@@ -106,10 +106,10 @@ const fmtValor = (n, formato) => {
 };
 
 // ── Opciones de Chart.js ──────────────────────────────────────────────────────
-const mkBarOpts = (fmt, horizontal = false) => ({
+const mkBarOpts = (fmt: any, horizontal = false) => ({
   responsive: true, maintainAspectRatio: true,
-  indexAxis: horizontal ? 'y' : 'x',
-  plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+  indexAxis: horizontal ? 'y' : 'x' as const,
+  plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 11 } } } },
   scales: {
     y: {
       beginAtZero: !horizontal,
@@ -117,8 +117,8 @@ const mkBarOpts = (fmt, horizontal = false) => ({
       ticks: {
         // CategoryScale passes the tick index (0,1,2…) to callbacks — use getLabelForValue
         callback: horizontal
-          ? function(value) { return this.getLabelForValue(value); }
-          : (v) => fmt(v),
+          ? function(this: any, value: any) { return this.getLabelForValue(value); }
+          : (v: any) => fmt(v),
         font: { size: 11 },
       },
     },
@@ -126,50 +126,50 @@ const mkBarOpts = (fmt, horizontal = false) => ({
       grid: { display: !horizontal },
       ticks: {
         callback: horizontal
-          ? (v) => fmt(v)
-          : function(value) { return this.getLabelForValue(value); },
+          ? (v: any) => fmt(v)
+          : function(this: any, value: any) { return this.getLabelForValue(value); },
         font: { size: 11 },
       },
     },
   },
 });
-const mkLineOpts = (fmt) => ({
+const mkLineOpts = (fmt: any) => ({
   responsive: true, maintainAspectRatio: true,
-  plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+  plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 11 } } } },
   scales: {
-    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => fmt(v), font: { size: 11 } } },
+    y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: (v: any) => fmt(v), font: { size: 11 } } },
     x: { grid: { display: false }, ticks: { font: { size: 11 } } },
   },
   elements: { line: { tension: 0.4 }, point: { radius: 3 } },
 });
-const mkPieOpts = (fmt) => ({
+const mkPieOpts = (fmt: any) => ({
   responsive: true, maintainAspectRatio: true,
   plugins: {
-    legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } },
-    tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${fmt(ctx.raw)}` } },
+    legend: { position: 'right' as const, labels: { boxWidth: 12, font: { size: 11 } } },
+    tooltip: { callbacks: { label: (ctx: any) => ` ${ctx.label}: ${fmt(ctx.raw)}` } },
   },
 });
-const mkPolarOpts = (fmt) => ({
+const mkPolarOpts = (fmt: any) => ({
   responsive: true, maintainAspectRatio: true,
-  plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11 } } } },
-  scales: { r: { ticks: { callback: v => fmt(v), font: { size: 10 } }, grid: { color: '#e5e7eb' } } },
+  plugins: { legend: { position: 'right' as const, labels: { boxWidth: 12, font: { size: 11 } } } },
+  scales: { r: { ticks: { callback: (v: any) => fmt(v), font: { size: 10 } }, grid: { color: '#e5e7eb' } } },
 });
 const mkRadarOpts = () => ({
   responsive: true, maintainAspectRatio: true,
-  plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+  plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 11 } } } },
   scales: { r: {
     beginAtZero: true, max: 100,
-    ticks: { callback: v => `${v}%`, font: { size: 10 } },
+    ticks: { callback: (v: any) => `${v}%`, font: { size: 10 } },
     grid: { color: '#e5e7eb' },
     pointLabels: { font: { size: 11 } },
   }},
   elements: { line: { tension: 0.1 } },
 });
-const mkScatterOpts = (ejex, ejey) => ({
+const mkScatterOpts = (ejex: string, ejey: string) => ({
   responsive: true, maintainAspectRatio: true,
-  plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+  plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 11 } } } },
   scales: {
-    x: { type: 'linear', position: 'bottom', title: { display: true, text: ejex, font: { size: 11 } }, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+    x: { type: 'linear' as const, position: 'bottom' as const, title: { display: true, text: ejex, font: { size: 11 } }, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
     y: { beginAtZero: false, title: { display: true, text: ejey, font: { size: 11 } }, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
   },
   elements: { point: { radius: 4, hoverRadius: 6 } },

@@ -126,10 +126,10 @@ function VisualizacionRegresion({ r }: { r: any }) {
   };
   const opts = {
     responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } } },
+    plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 10 } } } },
     scales: {
       x: { ticks: { font: { size: 10 }, maxRotation: 45 }, grid: { display: false } },
-      y: { ticks: { font: { size: 10 }, callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } },
+      y: { ticks: { font: { size: 10 }, callback: (v: number | string) => fmtN(Number(v)) }, grid: { color: '#f1f5f9' } },
     },
   };
 
@@ -218,10 +218,10 @@ function VisualizacionClustering({ r }: { r: any }) {
 
   const opts = {
     responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } } },
+    plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 10 } } } },
     scales: {
-      x: { title: { display: true, text: humanLabel(r.col_x), font: { size: 10 } }, ticks: { font: { size: 10 }, callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } },
-      y: { title: { display: true, text: humanLabel(r.col_y), font: { size: 10 } }, ticks: { font: { size: 10 }, callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } },
+      x: { title: { display: true, text: humanLabel(r.col_x), font: { size: 10 } }, ticks: { font: { size: 10 }, callback: (v: number | string) => fmtN(Number(v)) }, grid: { color: '#f1f5f9' } },
+      y: { title: { display: true, text: humanLabel(r.col_y), font: { size: 10 } }, ticks: { font: { size: 10 }, callback: (v: number | string) => fmtN(Number(v)) }, grid: { color: '#f1f5f9' } },
     },
   };
 
@@ -311,10 +311,10 @@ function VisualizacionSeriesTiempo({ r }: { r: any }) {
   };
   const opts = {
     responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } } },
+    plugins: { legend: { position: 'top' as const, labels: { boxWidth: 12, font: { size: 10 } } } },
     scales: {
       x: { ticks: { font: { size: 10 }, maxRotation: 45 }, grid: { display: false } },
-      y: { ticks: { font: { size: 10 }, callback: v => fmtN(v) }, grid: { color: '#f1f5f9' } },
+      y: { ticks: { font: { size: 10 }, callback: (v: number | string) => fmtN(Number(v)) }, grid: { color: '#f1f5f9' } },
     },
   };
 
