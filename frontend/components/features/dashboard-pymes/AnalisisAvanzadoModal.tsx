@@ -181,7 +181,7 @@ function VisualizacionAnomalias({ r }: { r: any }) {
               </tr>
             </thead>
             <tbody>
-              {r.anomalias.slice(0, 12).map((a, i) => (
+              {r.anomalias.slice(0, 12).map((a: any, i: number) => (
                 <tr key={i} style={{ background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
                   <td style={{ padding: '7px 10px', borderBottom: '1px solid #f1f5f9', color: '#374151', fontWeight: 500 }}>{humanLabel(a.columna)}</td>
                   <td style={{ padding: '7px 10px', borderBottom: '1px solid #f1f5f9', fontWeight: 700, color: a.tipo === 'alto' ? '#dc2626' : '#2563eb' }}>{fmtN(a.valor)}</td>
@@ -208,9 +208,9 @@ function VisualizacionAnomalias({ r }: { r: any }) {
 
 function VisualizacionClustering({ r }: { r: any }) {
   const CLUSTER_COLORS = [PAL[0], PAL[1], PAL[2]];
-  const datasets = Array.from({ length: r.k }, (_, i) => ({
+  const datasets = Array.from({ length: r.k }, (_: unknown, i: number) => ({
     label: r.clusters[i]?.nombre ?? `Grupo ${i+1}`,
-    data:  (r.scatter || []).filter(p => p.cluster === i).map(p => ({ x: p.x, y: p.y })),
+    data:  (r.scatter || []).filter((p: any) => p.cluster === i).map((p: any) => ({ x: p.x, y: p.y })),
     backgroundColor: CLUSTER_COLORS[i % CLUSTER_COLORS.length] + 'aa',
     borderColor:     CLUSTER_COLORS[i % CLUSTER_COLORS.length],
     pointRadius: 5, pointHoverRadius: 7,
@@ -228,7 +228,7 @@ function VisualizacionClustering({ r }: { r: any }) {
   return (
     <div>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
-        {(r.clusters || []).map((cl, i) => (
+        {(r.clusters || []).map((cl: any, i: number) => (
           <div key={i} style={{ flex: 1, minWidth: '120px', background: CLUSTER_COLORS[i] + '15', border: `1.5px solid ${CLUSTER_COLORS[i]}55`, borderRadius: '8px', padding: '8px 12px' }}>
             <p style={{ fontSize: '11px', fontWeight: 700, color: CLUSTER_COLORS[i], margin: '0 0 3px' }}>{cl.nombre}</p>
             <p style={{ fontSize: '12px', fontWeight: 600, color: '#111827', margin: 0 }}>{cl.n} registros ({cl.pct}%)</p>
@@ -253,7 +253,7 @@ function VisualizacionCorrelacion({ r }: { r: any }) {
         <div style={{ marginBottom: '14px' }}>
           <p style={{ fontSize: '11px', fontWeight: 700, color: '#374151', margin: '0 0 8px' }}>Correlaciones significativas (|r| &gt; 0.5):</p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-            {r.pares.map((p, i) => (
+            {r.pares.map((p: any, i: number) => (
               <div key={i} style={{ padding: '6px 12px', borderRadius: '20px', background: p.tipo === 'positiva' ? '#dcfce7' : '#fee2e2', border: `1px solid ${p.tipo === 'positiva' ? '#86efac' : '#fca5a5'}` }}>
                 <span style={{ fontSize: '11px', fontWeight: 700, color: p.tipo === 'positiva' ? '#15803d' : '#b91c1c' }}>
                   {humanLabel(p.col1)} ↔ {humanLabel(p.col2)}: {p.r > 0 ? '+' : ''}{p.r} ({p.fuerza})
@@ -270,7 +270,7 @@ function VisualizacionCorrelacion({ r }: { r: any }) {
           <thead>
             <tr>
               <th style={{ padding: '6px 8px', background: '#f8fafc', border: '1px solid #e5e7eb' }}></th>
-              {cols.map(c => (
+              {cols.map((c: any) => (
                 <th key={c} style={{ padding: '6px 8px', background: '#f8fafc', border: '1px solid #e5e7eb', fontWeight: 600, color: '#374151', maxWidth: '80px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                   {humanLabel(c)}
                 </th>
@@ -278,12 +278,12 @@ function VisualizacionCorrelacion({ r }: { r: any }) {
             </tr>
           </thead>
           <tbody>
-            {(r.matriz || []).map((fila, i) => (
+            {(r.matriz || []).map((fila: any, i: number) => (
               <tr key={i}>
                 <td style={{ padding: '6px 8px', background: '#f8fafc', border: '1px solid #e5e7eb', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>
                   {humanLabel(fila.col)}
                 </td>
-                {fila.valores.map((v, j) => (
+                {fila.valores.map((v: number, j: number) => (
                   <td key={j} style={{ padding: '6px 8px', border: '1px solid #e5e7eb', textAlign: 'center', background: corrColor(v), color: corrText(v), fontWeight: Math.abs(v) > 0.5 ? 700 : 400, minWidth: '60px' }}>
                     {v.toFixed(2)}
                   </td>
